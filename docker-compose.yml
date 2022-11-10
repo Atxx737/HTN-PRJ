@@ -1,0 +1,35 @@
+version: '3'
+services:
+    api:
+        container_name: flask-api
+        build: .
+        command: python -m flask run --host=0.0.0.0 --port=5000
+        ports:
+            - 5000:5000
+        environment:
+            - FLASK_APP=app.py
+        env_file:
+            - .env
+        depends_on:
+            - db
+        
+
+    db:
+        container_name: db-postgres
+        image: postgres
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_DB=htn_db
+        volumes:
+            - flask_htn_data:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+        
+volumes:
+    flask_htn_data:
+          name: db-flask-htn
+
+networks:
+  default:
+    name: htn_prj
