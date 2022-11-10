@@ -52,13 +52,18 @@ def add_room():
         room = Rooms(room_id=room_id,name=name,theshold_tem=theshold_tem,theshold_hum=theshold_hum)
         db.session.add(room)
         db.session.commit()
+    
     return {"id": room_id, "message": f"Room {name} created."}, 201
 
+@app.route("/api/allroom", methods=['GET'])
+def get_all_room():
+    if request.method == 'GET':
+        all_rooms = Rooms.query.order_by(Rooms.room_id).all()
+    return {"all_rooms ": f"{all_rooms}"}, 201
 
 @app.route("/api/room/<string:room_id>", methods=['GET'])
 def get_room(room_id):
     room = Rooms.query.filter_by(room_id=room_id).first()
-
     return {"room " f"{room_id}": f"{room}"}, 201
 
 @app.route("/api/sensor", methods=[ 'POST'])
@@ -76,9 +81,9 @@ def add_sensor():
             db.session.commit()
     return {"message": "Sensor added."}, 201
 
-@app.route("/api/sensor/<int:sensor_id_r>", methods=['GET', 'POST'])
-def display_sensor():
-    return 1
+# @app.route("/api/sensor/<int:sensor_id_r>", methods=['GET', 'POST'])
+# def display_sensor():
+#     return 1
 
 @app.route("/api/user", methods=[ 'POST'])
 def add_user():
