@@ -6,7 +6,7 @@ db = SQLAlchemy()
 class Rooms(db.Model):
   
     room_id = db.Column(db.String(6), primary_key=True)
-    name = db.Column(db.String(20), unique=False, nullable=False)
+    name = db.Column(db.String(50), unique=False, nullable=False)
     theshold_tem = db.Column(db.Float, nullable=False)
     theshold_hum = db.Column(db.Float, nullable=False)
  
@@ -17,7 +17,7 @@ class Rooms(db.Model):
 
 class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=False, nullable=False)
+    username = db.Column(db.String(30), unique=False, nullable=False)
     passwd = db.Column(db.String(), nullable=False)
  
     # repr method represents how one object of this datatable

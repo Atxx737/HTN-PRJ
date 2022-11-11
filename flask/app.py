@@ -7,8 +7,6 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from flask_script import Manager
 load_dotenv()  # loads variables from .env file into environment
 
 from flask_cors import CORS
@@ -23,7 +21,7 @@ app.config['SECRET_KEY'] = 'thisissecret'
 username = "postgres"
 password = "mysecretpassword"
 dbname = "testdb"
-app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{username}:{password}@localhost:5432/{dbname}"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{username}:{password}@0.0.0.0:5432/{dbname}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)

@@ -2,18 +2,18 @@ version: '3'
 services:
     api:
         container_name: flask-api
-        build: .
-        command: python -m flask run --host=0.0.0.0 --port=5000
+        build: ./flask
+        # command: python -m flask run --host=0.0.0.0 --port=5000
+        command: python3 app.py run --host=0.0.0.0 --port=5000
         ports:
             - 5000:5000
         environment:
             - FLASK_APP=app.py
         env_file:
-            - .env
+            - ./flask/.env
         depends_on:
             - db
         
-
     db:
         container_name: db-postgres
         image: postgres
@@ -25,7 +25,16 @@ services:
             - flask_htn_data:/var/lib/postgresql/data
         ports:
             - 5432:5432
-        
+    
+    # nginx:
+    #     container_name: nginx-flask
+    #     images: nginx
+    #     restart: always
+    #     volumes:
+    #         - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    #         - sock:/sock
+    #     ports:
+    #         - "80:80"
 volumes:
     flask_htn_data:
           name: db-flask-htn
