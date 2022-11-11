@@ -21,7 +21,8 @@ app.config['SECRET_KEY'] = 'thisissecret'
 username = "postgres"
 password = "mysecretpassword"
 dbname = "testdb"
-app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{username}:{password}@0.0.0.0:5432/{dbname}"
+host = "localhost"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{username}:{password}@{host}:5432/{dbname}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
@@ -68,13 +69,13 @@ def get_room(room_id):
 def add_sensor():
     if request.method == 'POST':
             data = request.get_json()
-            # sensor_id = data["sensor_id"]
+            _id = data["id"]
             sensor_id = data["sensor_id"]
             room_id = data["room_id"]
             temperature = data["temperature"]
             humidity = data["humidity"]
             date= data["date"]
-            sensor= Sensors(sensor_id=sensor_id,room_id=room_id,temperature=temperature,humidity=humidity,date=date)
+            sensor= Sensors(id=_id,sensor_id=sensor_id,room_id=room_id,temperature=temperature,humidity=humidity,date=date)
             db.session.add(sensor)
             db.session.commit()
     return {"message": "Sensor added."}, 201

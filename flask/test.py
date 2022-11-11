@@ -1,6 +1,3 @@
-from werkzeug.security import generate_password_hash, check_password_hash
+import uuid
 
-hashed_password = generate_password_hash('admin')
-
-print(check_password_hash(hashed_password, 'admin')) # prints True
-print(check_password_hash(hashed_password, 'foobarbaz')) # prints False
+print(str(uuid.uuid4().fields[-1])[:5])

@@ -27,7 +27,8 @@ class Users(db.Model):
     
 
 class Sensors(db.Model):
-    sensor_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    sensor_id = db.Column(db.String(6), nullable=False)
     room_id = db.Column(db.String(6), db.ForeignKey('rooms.room_id', ondelete='CASCADE'), nullable=False)
     temperature = db.Column(db.Float, unique=False, nullable=False)
     humidity = db.Column(db.Float, nullable=False)
