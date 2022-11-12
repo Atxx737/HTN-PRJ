@@ -1,14 +1,33 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>{{ title }}</title>
-</head>
-<body>
-   <h1>Hello, World!</h1>
-      <h2>The date and time on the server is: {{ time }}</h2>
-</body>
-</html>
+{% extends "template.html" %}
+
+{% block title_nav %}
+   GROUP 14 : DHT11 STATUS
+{% endblock %}
+
+{% block nav %}
+	
+   <div class="lginbtn">
+      <a href="{{ url_for('logout') }}" style="font-size: 1.1rem;">Log out</a>
+
+   </div>
+   <div class="senselect">
+      <label for="Sens">Select a Room: &nbsp;</label>
+      
+      <select name="Sens" id="Sens" style="height: 32px; font-size: 1.1rem; padding: 0 12px; cursor:pointer; ">
+         {% for item in all_rooms %}  
+            <option>{{ item.name }}</option>
+            <!-- <a href="" >{{ item.name }}</a> -->
+         {% endfor %}
+            <option>All rooms</option>
+      </select>	
+     
+   </div>
+{% endblock %}
+{% block content %}
+      {% include 'chart.html' %}
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

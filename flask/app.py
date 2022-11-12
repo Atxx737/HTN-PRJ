@@ -1,12 +1,12 @@
 import json
 from datetime import datetime
-from flask import Flask, request, render_template, session, jsonify
+from flask import Flask, request, render_template, session, jsonify, redirect, url_for, flash
 from werkzeug.security  import check_password_hash, generate_password_hash
+from flask_login import login_required, logout_user, login_user
 
-
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from flask_migrate import Migrate
-load_dotenv()  # loads variables from .env file into environment
+# load_dotenv()  # loads variables from .env file into environment
 
 from flask_cors import CORS
 
@@ -31,13 +31,17 @@ migrate = Migrate(app, db)
 
 @app.route('/')
 def hello_world():
-    now = datetime.now()
-    timeString = now.strftime("%Y-%m-%d %H:%M")
-    templateData = {
-      'title' : 'HELLO!',
-      'time': timeString
-      }
-    return render_template('index.html', **templateData)
+    # if 'username' in session:
+        all_rooms = Rooms.query.order_by(Rooms.room_id).all()
+        
+        # context={
+        # "all_rooms":all_rooms,
+        # # "ProjectDone":prjDone,
+        # # "ProjectTotal":prjTotal,
+        # }
+
+        return render_template('index.html',all_rooms=all_rooms)
+    # return redirect(url_for('login'))
 
 
 @app.route("/api/room", methods=['POST'])
@@ -59,15 +63,19 @@ def get_all_room():
     if request.method == 'GET':
         all_rooms = Rooms.query.order_by(Rooms.room_id).all()
     return {"all_rooms ": f"{all_rooms}"}, 201
+    # return render_template('index.html', **all_rooms)
 
 @app.route("/api/room/<string:room_id>", methods=['GET'])
 def get_room(room_id):
     room = Rooms.query.filter_by(room_id=room_id).first()
-    return {"room " f"{room_id}": f"{room}"}, 201
+    metric = Sensors.query.order_by(Sensors.room_id).all()
+    
+    return {"room " f"{room_id}": f"{room} + metric " f"{metric}" }, 201
 
 @app.route("/api/sensor", methods=[ 'POST'])
 def add_sensor():
     if request.method == 'POST':
+
             data = request.get_json()
             _id = data["id"]
             sensor_id = data["sensor_id"]
@@ -79,14 +87,14 @@ def add_sensor():
             db.session.add(sensor)
             db.session.commit()
     return {"message": "Sensor added."}, 201
+    
+# @app.route("/api/sensor/<int:room_id>", methods=['GET'])
 
-# @app.route("/api/sensor/<int:sensor_id_r>", methods=['GET', 'POST'])
-# def display_sensor():
-#     return 1
 
 @app.route("/api/user", methods=[ 'POST'])
 def add_user():
     if request.method == 'POST':
+        
         data = request.get_json()
         # sensor_id = data["sensor_id"]
         user_id = data["user_id"]
@@ -97,27 +105,35 @@ def add_user():
         db.session.commit()
     return {"message": f"User {username} added."}, 201
 
-@app.route('/login', methods=['POST'])
+# LOGIN METHOD
+@app.route('/login')
 def login():
+    return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def login_post():
     if request.method == 'POST':
-        # username = request.form.get('username')
-        # password = request.form.get('password')
-        data = request.get_json()
-        username = data["username"]
-        passwd = data["passwd"]
+        username = request.form.get('username')
+        passwd = request.form.get('password') 
+        
         user = Users.query.filter_by(username=username).first()
         if user is not None and check_password_hash(user.passwd, passwd):
             session['user_id'] = user.user_id
-            return {"message": f"User {username} logged in successfully.\n"+"Session:" f"{username}"}, 201
-        else:
-            return {"message": f"User {username} not found."}, 400
-    return render_template('index.html')
-		
+            return redirect(url_for('hello_world'))
+
+        flash('Wrong password or username!')
+        return redirect(url_for('login'))
+
+
 @app.route('/logout')
+@login_required
 def logout():
 	if 'username' in session:
 		session.pop('username', None)
-	return jsonify({'message' : 'You successfully logged out'})
+	return redirect('/')
+   
+    # return redirect(url_for('hello_world'))
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True, port=5000)

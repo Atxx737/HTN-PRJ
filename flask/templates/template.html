@@ -1,0 +1,37 @@
+<!DOCTYPE HTML><html>
+    <head>
+    <title>DHT Web Server</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="icon" href="data:,">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+
+    
+    </head>
+    <body>
+        <div class="topnav">
+            <!-- <h2>GROUP 14 : DHT11 STATUS</h2>  	   -->
+            <h2>
+                {% block title_nav %}
+                {% endblock %}
+            </h2>  	  
+
+            {% block nav %}
+            {% endblock %}
+
+        </div>
+
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+        
+        {% block script %} {% endblock %}
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </body>
+    
+</html>
