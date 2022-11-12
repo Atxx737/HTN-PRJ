@@ -1,10 +1,9 @@
 import json
-from datetime import datetime, timezone
+from datetime import datetime
 from flask import Flask, request, render_template, session, jsonify
 from werkzeug.security  import check_password_hash, generate_password_hash
 
-import os
-import psycopg2
+
 from dotenv import load_dotenv
 from flask_migrate import Migrate
 load_dotenv()  # loads variables from .env file into environment
@@ -19,10 +18,11 @@ app.debug = True
 app.config['SECRET_KEY'] = 'thisissecret'
 # our database uri
 username = "postgres"
-password = "mysecretpassword"
-dbname = "testdb"
-host = "localhost"
-app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{username}:{password}@{host}:5432/{dbname}"
+password = "password"
+dbname = "htn_db"
+docker_postgres_name = "db-postgres"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{username}:{password}@{docker_postgres_name}:5432/{dbname}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)

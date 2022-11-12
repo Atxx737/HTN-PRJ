@@ -1,7 +1,7 @@
 version: '3'
 services:
-    api:
-        container_name: flask-api
+    api-flask:
+        container_name: api-flask
         build: ./flask
         # command: python -m flask run --host=0.0.0.0 --port=5000
         command: python3 app.py run --host=0.0.0.0 --port=5000
@@ -12,12 +12,15 @@ services:
         env_file:
             - ./flask/.env
         depends_on:
-            - db
+            - db-postgres
+        networks:
+            - htn_prj
         
-    db:
+    db-postgres:
         container_name: db-postgres
         image: postgres
         environment:
+            - POSTGRES_HOST_AUTH_METHOD=trust
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=password
             - POSTGRES_DB=htn_db
@@ -25,8 +28,10 @@ services:
             - flask_htn_data:/var/lib/postgresql/data
         ports:
             - 5432:5432
-    
-    nginx:
+        networks:
+            - htn_prj
+      
+    nginx-flask:
         container_name: nginx-flask
         image: nginx:latest
         restart: always
@@ -35,10 +40,14 @@ services:
             # - sock:/sock
         ports:
             - "80:80"
+        networks:
+            - htn_prj
+      
+
 volumes:
     flask_htn_data:
           name: db-flask-htn
 
 networks:
-  default:
-    name: htn_prj
+  htn_prj:
+    external: true
