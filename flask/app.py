@@ -34,12 +34,7 @@ def hello_world():
     # if 'username' in session:
         all_rooms = Rooms.query.order_by(Rooms.room_id).all()
         
-        # context={
-        # "all_rooms":all_rooms,
-        # # "ProjectDone":prjDone,
-        # # "ProjectTotal":prjTotal,
-        # }
-
+       
         return render_template('index.html',all_rooms=all_rooms)
     # return redirect(url_for('login'))
 
@@ -58,19 +53,35 @@ def add_room():
     
     return {"id": room_id, "message": f"Room {name} created."}, 201
 
-@app.route("/api/allroom", methods=['GET'])
-def get_all_room():
+@app.route("/api/allroom/<string:room_id>", methods=['GET'])
+def get_all_room(room_id):
     if request.method == 'GET':
-        all_rooms = Rooms.query.order_by(Rooms.room_id).all()
-    return {"all_rooms ": f"{all_rooms}"}, 201
+        m_temp= Sensors.query.filter_by(room_id=room_id).order_by(Sensors.date).all()
+        #    m_temp= db.session.query(Sensors.temperature).filter_by(room_id=room_id).order_by(Sensors.date).all()
+    return {"m_temp ": f"{m_temp}"}, 201
     # return render_template('index.html', **all_rooms)
 
 @app.route("/api/room/<string:room_id>", methods=['GET'])
-def get_room(room_id):
-    room = Rooms.query.filter_by(room_id=room_id).first()
-    metric = Sensors.query.order_by(Sensors.room_id).all()
-    
-    return {"room " f"{room_id}": f"{room} + metric " f"{metric}" }, 201
+def get_metric_room(room_id):
+    # room = Rooms.query.filter_by(room_id=room_id).first()
+    all_rooms = Rooms.query.order_by(Rooms.room_id).all() 
+    metric = db.session.query(Sensors.date,Sensors.temperature,Sensors.humidity).filter_by(room_id=room_id).order_by(Sensors.date).all()
+    # m_date= db.session.query(Sensors.date).filter_by(room_id=room_id).order_by(Sensors.date).all()
+    # m_temp= db.session.query(Sensors.date,Sensors.temperature).filter_by(room_id=room_id).order_by(Sensors.date).all()
+    # m_temp= Sensors.query.filter_by(room_id=room_id).order_by(Sensors.date).all()
+    # m_hum= db.session.query(Sensors.humidity).filter_by(room_id=room_id).order_by(Sensors.date)
+    room= Sensors.query.filter_by(room_id=room_id).order_by(Sensors.date.desc()).first()
+    templateData={
+        "all_rooms":all_rooms,
+        # "m_date":m_date,
+        # "m_temp":m_temp,
+        # "m_hum":m_hum,
+        "metric":metric,
+        "room":room
+
+    }
+    # return render_template('chart.html', all_rooms=all_rooms, m_date=m_date,m_temp=m_temp, m_hum=m_hum)
+    return render_template('chart.html', **templateData)
 
 @app.route("/api/sensor", methods=[ 'POST'])
 def add_sensor():

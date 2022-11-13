@@ -13,7 +13,7 @@ body {  margin: 0;}
   
 .content { padding: 20px; }
 .card { background-color: white; box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5); }
-.cards { max-width: 700px; margin: 0 auto; display: grid; grid-gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.cards { max-width: 500px; margin: 0 auto; display: grid; grid-gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
 .reading { font-size: 2.8rem; }
 .card.senid { color: black; }
 .card.room { color: #45516C; }
