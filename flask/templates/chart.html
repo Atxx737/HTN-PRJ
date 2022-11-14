@@ -22,7 +22,7 @@
                 {% endif %}
                    
            {% endfor %}
-                <option selected="selected"> {{ room.room_id }} </option>
+                <option selected="selected"> {{ roomDetail.name }} </option>
                <option value="{{ url_for('hello_world') }}">All rooms</option>
          </select>	
       
@@ -34,60 +34,175 @@
       <!-- Content here -->
    
       <div class="container text-center">
-      
-        <div class="row">
-            <div id="load" class="cards">
-                <div class="card senid">
-                    <h4><i class="fas fa-wifi"></i> Sensor ID </h4><p><span class="reading">{{room.sensor_id}}</span></p>
-                  </div>
-                <div class="card threshold-temp">
-                    <h4><i class="fas fa-thermometer-half"></i> Theshold of Temperature </h4><p><span class="reading">{{roomDetail.theshold_tem}}</span></p>
-                  </div>
-                  <div class="card threshold-hum">
-                    <h4><i class="fas fa-tint"></i> Theshold of Humidity </h4><p><span class="reading">{{roomDetail.theshold_hum}}</span></p>
-                  </div>
-                <div class="card temperature">
-                    <h4><i class="fas fa-thermometer-half"></i> TEMPERATURE </h4><p><span class="reading">{{room.temperature}} &deg;C</span></p>
-                  </div>
-                <div class="card humidity">
-                    <h4><i class="fas fa-tint"></i> HUMIDITY </h4><p><span class="reading">{{room.humidity}} &percnt;</span></p>
-                  </div>
-                <div class="card time">
-                    <h4><i class="fas fa-clock"></i> TIME </h4><p><span class="reading">{{room.date}}</span></p>
-                  </div>
-                <!-- <div class="card warning">
-                    <h4><i class="fas fa-exclamation-triangle"></i> WARNING </h4><p><span class="reading">{{warning}}</span></p>
-                  </div> -->
-            </div>
-        </div> 
-        <div class="row">
-            <div >
-                {% set date = [] %}
-                {% set temp = [] %}
-                {% set hum = [] %}
-                {% for item in metric %}  
-                   {{ date.append(item[0].strftime("%H:%M:%S %d-%m-%Y") ) }}
-                   {{ temp.append(item[1]|lower) }}
-                   {{ hum.append(item[2]|lower)  }}
-                {% endfor %}
-                {% set date = "|".join(date) %}
-                {% set temp = "|".join(temp) %}
-                {% set hum = "|".join(hum) %}
+          <div class="row">
+              <div id="load" class="cards">
+                  <div class="card senid">
+                      <h4><i class="fas fa-wifi"></i> Sensor ID </h4><p><span class="reading">{{room.sensor_id}}</span></p>
+                    </div>
+                  <div class="card threshold-temp">
+                      <h4><i class="fas fa-thermometer-half"></i> Theshold of Temperature </h4><p><span class="reading">{{roomDetail.theshold_tem}}</span></p>
+                    </div>
+                    <div class="card threshold-hum">
+                      <h4><i class="fas fa-tint"></i> Theshold of Humidity </h4><p><span class="reading">{{roomDetail.theshold_hum}}</span></p>
+                    </div>
+                  <div class="card temperature">
+                      <h4><i class="fas fa-thermometer-half"></i> TEMPERATURE </h4><p><span class="reading">{{room.temperature}} &deg;C</span></p>
+                    </div>
+                  <div class="card humidity">
+                      <h4><i class="fas fa-tint"></i> HUMIDITY </h4><p><span class="reading">{{room.humidity}} &percnt;</span></p>
+                    </div>
+                  <div class="card time">
+                      <h4><i class="fas fa-clock"></i> TIME </h4><p><span class="reading">{{room.date}}</span></p>
+                    </div>
+                  <!-- <div class="card warning">
+                      <h4><i class="fas fa-exclamation-triangle"></i> WARNING </h4><p><span class="reading">{{warning}}</span></p>
+                    </div> -->
+              </div>
+          </div> 
 
-            </div>
+          <div class="row">
+              <div hidden>
+                  {% set date = [] %}
+                  {% set temp = [] %}
+                  {% set hum = [] %}
+                  {% for item in metric %}  
+                    {{ date.append(item[0].strftime("%H:%M:%S %d-%m-%Y") ) }}
+                    {{ temp.append(item[1]|lower) }}
+                    {{ hum.append(item[2]|lower)  }}
+                  {% endfor %}
+                  {% set date = "|".join(date) %}
+                  {% set temp = "|".join(temp) %}
+                  {% set hum = "|".join(hum) %}
+
+              </div>
+              
+              <div class="col">
+                  <canvas id="myChart" width="400" >
+                    
+                  </canvas>
             
+              </div>
+          </div>
+          <div class="row">
+
+          </div>
+          <div class="row">
             <div class="col">
-                <canvas id="myChart" width="400" >
-                   
+                <canvas id="tempChart" width="400" >
+                  
                 </canvas>
-           
+          
+            </div>
+            <div class="col">
+              <canvas id="tempHum" width="400" >
+                
+              </canvas>
+        
             </div>
             <script>
                 window.onload = function () {
-//                    var labels ='{{ date|length }}';  // date
                     var labels = '{{ date }}'.split("|")
-                    var name = 1;
                     var config = {
+                      data: {
+                          labels: labels,
+                          datasets: [
+                              {
+                                  type: 'bar',
+
+                                  label: 'Temperature',
+                                  // data: '{{ temp }}',
+                                  data: '{{ temp }}'.split("|"),
+                                  backgroundColor: [
+                                  'rgba(255, 99, 132, 0.2)',
+                                  ],
+                                  borderColor: [
+                                  'rgb(255, 99, 132)',
+                                  ],
+                                  borderWidth: 1
+                              },
+                            
+                              {
+                                  type: 'bar',
+                                  label: 'Humidity',
+                                  data: '{{ hum }}'.split("|"),
+                                  backgroundColor: [
+                                  'rgba(54, 162, 235, 0.2)',
+                                  ],
+                                  borderColor: [
+                                  'rgb(54, 162, 235)'
+                                  ],
+                                  borderWidth: 1
+                              },
+                              ]
+                        
+                          },
+                          options: {
+                            scales: {
+                              y: {
+                                beginAtZero: true
+                              }
+                            }
+                          },
+                  };
+                  
+                    const ctx_chart = document.getElementById('myChart').getContext('2d');
+                    window.myLine = new Chart(ctx_chart, config);
+
+                   /////////// plugin threshold hump
+                    const horizonalLinePluginHum = {
+                      id:'horizonalLinePlugin',
+                      beforeDatasetsDraw(chart, args, options) 
+                      {
+                        const { 
+                          ctx, chartArea: {top, right, bottom, left, width, height},
+                          scales: {x, y}
+                        } = chart;
+                        ctx.save();
+                        
+                        ctx.strokeStyle = 'red';
+                        ctx.strokeRect(left, y.getPixelForValue(10), width, 0);
+                        ctx.restore();
+                      }
+            
+                    };
+  
+                   /////////// plugin threshold hump
+                   const horizonalLinePlugin = {
+                    id:'horizonalLinePlugin',
+                    beforeDatasetsDraw(chart, args, options) 
+                    {
+                      const { 
+                        ctx, chartArea: {top, right, bottom, left, width, height},
+                        scales: {x, y}
+                      } = chart;
+                      ctx.save();
+                      
+                      ctx.strokeStyle = 'red';
+                      ctx.strokeRect(left, y.getPixelForValue('{{roomDetail.theshold_hum}}'), width, 0);
+                      ctx.restore();
+                    }
+          
+                  };
+//-------------------------------------------//
+                      const horizonalLinePluginTemp = {
+                        id:'horizonalLinePluginTemp',
+                        beforeDatasetsDraw(chart, args, options) 
+                        {
+                          const { 
+                            ctx1, chartArea: {top, right, bottom, left, width, height},
+                            scales: {x, y}
+                          } = chart;
+                          ctx1.save();
+                          
+                          ctx1.strokeStyle = 'red';
+                          ctx1.strokeRect(left, y.getPixelForValue('{{roomDetail.theshold_tem}}'), width, 0);
+                          ctx1.restore();
+                        }
+
+                      };
+
+                  ////////////// tempChart
+                    var config_tempChart = {
                         data: {
                             labels: labels,
                             datasets: [
@@ -105,60 +220,63 @@
                                     ],
                                     borderWidth: 1
                                 },
-                              
-                                {
-                                    type: 'bar',
-                                    label: 'Humidity',
-                                    data: '{{ hum }}'.split("|"),
-                                    backgroundColor: [
-                                    'rgba(54, 162, 235, 0.2)',
-                                    ],
-                                    borderColor: [
-                                    'rgb(54, 162, 235)'
-                                    ],
-                                    borderWidth: 2
-                                },
                                 ]
-                          
                             },
-                            options: {
-                                scales: {
-                                  y: {
-                                    beginAtZero: true
-                                  }
-                                },
-                                plugins: {
-                                  autocolors: true,
-                                  annotation: {
-                                    annotations: {
-                                      line1: {
-                                        type: 'line',
-                                        yMin: 65,
-                                        yMax: 65,
-                                        borderColor: 'rgb(255, 255, 255)',
-                                        borderWidth: 20,
-                                      }
-                                    }
-                                  }
+                        options: {
+                              scales: {
+                                y: {
+                                  beginAtZero: true
                                 }
+                              }
+                            },
+                        plugins:[horizonalLinePlugin],
+                        
+                    
+                    };
+                    
+                    const ctx_temp = document.getElementById('tempChart').getContext('2d');
+                    window.myLine = new Chart(ctx_temp, config_tempChart);
+                  //////////// humChart
+                    var config_humChart = {
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                  type: 'bar',
+                                  label: 'Humidity',
+                                  data: '{{ hum }}'.split("|"),
+                                  backgroundColor: [
+                                  'rgba(54, 162, 235, 0.2)',
+                                  ],
+                                  borderColor: [
+                                  'rgb(54, 162, 235)'
+                                  ],
+                                  borderWidth: 1
+                              },
+                                ]
+                            },
+                        options: {
+                          scales: {
+                            y: {
+                              beginAtZero: true
                             }
+                          },
+                        },
+                        plugins:[horizonalLinePlugin],
                     };
-                    
-                    
-                    
-                    const ctx = document.getElementById('myChart').getContext('2d');
-                    window.myLine = new Chart(ctx, config);
-                    };
+                    const ctx_hum = document.getElementById('tempHum').getContext('2d');
+                    window.myLine = new Chart(ctx_hum, config_humChart);
+                 
+                };
             </script>
-        </div>
-         
+          </div>
       </div>
-         
+
       
    </div>   
 {% endblock %}
 
 {% block script %}
-    <script src="{{ url_for('static', filename='js/room-metric.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/room-metric.js') }}"></script> -->
    
 {% endblock %}

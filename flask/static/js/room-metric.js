@@ -1,83 +1,66 @@
-// get unique value of array
-
-var numHum= document.querySelector(".nu-hum");
-var numTem= document.querySelector(".nu-tem");
-var numDate= document.querySelector(".nu-date");
-console.log("numHum",numHum.value);
-console.log("numTem",numHum.value);
-console.log("numDate",numHum.value);
-
-
-// var numTaskDone= document.querySelector(".nu-taskdone");
-// console.log("numTaskDone",numTaskDone.value);
-    
-
-// var incomplete= numTask.value - numTaskDone.value;
-// console.log("incomplete",incomplete);
-
 window.onload = function () {
-    var data = [numTem ]; // temp
-    var labels = [numDate ];  // date
-    
-    var config = {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: data,
-                    data: data,
-                    backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)',
-                    ],
-                    borderColor: [
-                        'rgb(255, 99, 132)',
-                    ],
-                    borderWidth: 1
-                }]
-            //     {
-            //         data: data,
-            //         label: "Alberta", //name of line
-            //         borderColor: "#3e95cd",
-            //         fill: false
-            //     }, 
-            //     {
-            //         data: data,
-            //         label: "BC",
-            //         borderColor: "#8e5ea2",
-            //         fill: false
-            //     }, 
-            //     {
-            //         data: data,
-            //         label: "Manitoba",
-            //         borderColor: "#3cba9f",
-            //         fill: false
-            //     }, 
-            //     {
-            //         data: data,
-            //         label: "New Brunswick",
-            //         borderColor: "#e8c3b9",
-            //         fill: false
-            //     }, 
-            //     {
-            //         data: data,
-            //         label: "NL",
-            //         borderColor: "#c45850",
-            //         fill: false
-            //     }
-            // ]
-            },
-            options: {
-                scales: {
-                  y: {
-                    beginAtZero: true
-                  }
-                }
-            }
-    };
-    
-    
-    
-    const ctx = document.getElementById('myChart_temp').getContext('2d');
-    window.myLine = new Chart(ctx, config);
-    };
+  //                    var labels ='{{ date|length }}';  // date
+                      var labels = '{{ date }}'.split("|")
+                      var name = 1;
+                      var config = {
+                          data: {
+                              labels: labels,
+                              datasets: [
+                                  {
+                                      type: 'bar',
+  
+                                      label: 'Temperature',
+                                      // data: '{{ temp }}',
+                                      data: '{{ temp }}'.split("|"),
+                                      backgroundColor: [
+                                      'rgba(255, 99, 132, 0.2)',
+                                      ],
+                                      borderColor: [
+                                      'rgb(255, 99, 132)',
+                                      ],
+                                      borderWidth: 1
+                                  },
+                                
+                                  {
+                                      type: 'bar',
+                                      label: 'Humidity',
+                                      data: '{{ hum }}'.split("|"),
+                                      backgroundColor: [
+                                      'rgba(54, 162, 235, 0.2)',
+                                      ],
+                                      borderColor: [
+                                      'rgb(54, 162, 235)'
+                                      ],
+                                      borderWidth: 2
+                                  },
+                                  ]
+                            
+                              },
+                              options: {
+                                  scales: {
+                                    y: {
+                                      beginAtZero: true
+                                    }
+                                  },
+                                  plugins: {
+                                    autocolors: true,
+                                    annotation: {
+                                      annotations: {
+                                        line1: {
+                                          type: 'line',
+                                          yMin: 65,
+                                          yMax: 65,
+                                          borderColor: 'rgb(255, 255, 255)',
+                                          borderWidth: 20,
+                                        }
+                                      }
+                                    }
+                                  }
+                              }
+                      };
+                      
+                      
+                      
+                      const ctx = document.getElementById('myChart').getContext('2d');
+                      window.myLine = new Chart(ctx, config);
+                      };

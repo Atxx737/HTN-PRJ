@@ -82,7 +82,7 @@ def add_room():
 def get_all_room(room_id):
     if request.method == 'GET':
         
-        m_temp= Sensors.query.order_by(Sensors.room_id).all()
+        m_temp= Sensors.query.order_by(Sensors.room_id).limit(2).all()
         #    m_temp= db.session.query(Sensors.temperature).filter_by(room_id=room_id).order_by(Sensors.date).all()
     return {"m_temp ": f"{m_temp}"}, 201
     # return render_template('index.html', **all_rooms)
@@ -91,7 +91,7 @@ def get_all_room(room_id):
 def get_metric_room(room_id):
     # room = Rooms.query.filter_by(room_id=room_id).first()
     all_rooms = Rooms.query.order_by(Rooms.room_id).all() 
-    metric = db.session.query(Sensors.date,Sensors.temperature,Sensors.humidity).filter_by(room_id=room_id).order_by(Sensors.date).all()
+    metric = db.session.query(Sensors.date,Sensors.temperature,Sensors.humidity).filter_by(room_id=room_id).order_by(Sensors.date).limit(20).all()
     # m_date= db.session.query(Sensors.date).filter_by(room_id=room_id).order_by(Sensors.date).all()
     # m_temp= db.session.query(Sensors.date,Sensors.temperature).filter_by(room_id=room_id).order_by(Sensors.date).all()
     # m_temp= Sensors.query.filter_by(room_id=room_id).order_by(Sensors.date).all()
@@ -131,7 +131,7 @@ def add_sensor():
         msg = Message(
             'Alert!',
             sender ='demoproject.uit@gmail.com',
-            recipients = ['tsumiki201@gmail.com']
+            recipients = ['20520625@gm.uit.edu.vn']
         )
         msg.body = 'The temperature or the humidity is over threshold!!!'
         mail.send(msg)
@@ -175,14 +175,11 @@ def login_post():
 
 
 @app.route('/logout')
-@login_required
 def logout():
 	# if 'username' in session:
     session.pop('username', None)
     return redirect('/')
    
-    # return redirect(url_for('hello_world'))
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True, port=5000)

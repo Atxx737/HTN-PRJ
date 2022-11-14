@@ -11,7 +11,8 @@ import json
 def main():
 #    t,humidity=DHTRasp.sensread(DHTRasp.sensorid)
     tzone = pytz.timezone("Asia/Ho_Chi_Minh")
-    url = "http://127.0.0.1/api/sensor"
+    url = "http://localhost/api/sensor"
+    # url = "http://ec2-18-140-69-222.ap-southeast-1.compute.amazonaws.com/api/sensor"
     
     data = {}
     room_id=['STR01','STR02','DRY01','DAI02','CTL01']
@@ -22,7 +23,7 @@ def main():
         data["sensor_id"] = "DHT01"
         data["room_id"] = random.choice(room_id)
     
-        data["temperature"] = random.choice(range(0, 90))
+        data["temperature"] = random.choice(range(80, 90))
         data["humidity"] = random.choice(range(10, 100))
         data["date"] = datetime.datetime.now(tzone).strftime("%Y-%m-%d %H:%M:%S")
         payload = json.dumps(data)
@@ -32,7 +33,7 @@ def main():
         print(response.text)
         # print(data)
         print("\n")
-        time.sleep(5)
+        # time.sleep(0.5)
     
     
 if __name__ == "__main__":
