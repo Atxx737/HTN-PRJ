@@ -2,7 +2,7 @@
 {% extends "template.html" %}
 
 {% block title_nav %}
-   GROUP 14 : DHT11 STATUS
+   GROUP 14 : HỆ THỐNG ĐO NHIỆT ĐỘ VÀ ĐỘ ẨM
 {% endblock %}
 
 {% block nav %}
@@ -17,7 +17,6 @@
          {% for item in all_rooms %}  
             <option value="{{ url_for('get_metric_room', room_id=item.room_id) }}">
              {{ item.name }}
-                  <!-- <a href="{{ url_for('get_metric_room', room_id=item.room_id) }}" >{{ item.name }}</a> -->
             </option>
         {% endfor %}
             
@@ -32,15 +31,18 @@
       <!-- Content here -->
    
       <div class="container text-center">
-      
+         <p>
+            {{metric[1]}} 
+         </p>
+         <p> {{metric}}</p>
          <div class="col">
             <canvas id="myChart_temp" width="400" >
-                  <input class="nu-temp " hidden  value={{all_rooms}}>
+                  <!-- <input class="nu-temp " hidden  value={{all_rooms}}> -->
             </canvas>
          </div>
          <div class="col">
             <canvas id="myChart_hum" width="400" >
-                  <input class="nu-hum " hidden  value={{all_rooms}}>
+                  <!-- <input class="nu-hum " hidden  value={{all_rooms}}> -->
             </canvas>
          </div>
       </div>

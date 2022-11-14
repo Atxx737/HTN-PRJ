@@ -15,6 +15,9 @@ class Rooms(db.Model):
     def __repr__(self):
         return f"Name : {self.name}, Theshold of temperature: {self.theshold_tem}, Theshold of humidity: {self.theshold_hum}"
 
+    def tempertureOfRoom(self):
+        
+        return 
 class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), unique=False, nullable=False)

@@ -16,5 +16,5 @@ with app.app_context():
     db.session.add(Rooms(room_id="DAI02",name='Dairy Storage',theshold_tem="25",theshold_hum="85"))
     db.session.add(Rooms(room_id="CTL01",name='Control Panel 1',theshold_tem="50",theshold_hum="85"))
 
-    db.session.add(Users(user_id="1",username="admin",passwd=generate_password_hash("admin")))
+    db.session.add(Users(username="admin",passwd=generate_password_hash("admin")))
     db.session.commit()

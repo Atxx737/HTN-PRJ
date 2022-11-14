@@ -3,7 +3,7 @@
 var numHum= document.querySelector(".nu-hum");
 var numTem= document.querySelector(".nu-tem");
 var numDate= document.querySelector(".nu-date");
-console.log("numHum",numHum.textContent);
+console.log("numHum",numHum.value);
 console.log("numTem",numHum.value);
 console.log("numDate",numHum.value);
 

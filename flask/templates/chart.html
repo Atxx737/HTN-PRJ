@@ -2,7 +2,7 @@
 {% extends "template.html" %}
 
 {% block title_nav %}
-   {{room.room_id}}
+   {{roomDetail.name}}
 {% endblock %}
 
 {% block nav %}
@@ -40,9 +40,12 @@
                 <div class="card senid">
                     <h4><i class="fas fa-wifi"></i> Sensor ID </h4><p><span class="reading">{{room.sensor_id}}</span></p>
                   </div>
-                <!-- <div class="card room">
-                    <h4><i class="fas fa-building"></i> ROOM NAME </h4><p><span class="reading">{{room.room_id}}</span></p>
-                  </div> -->
+                <div class="card threshold-temp">
+                    <h4><i class="fas fa-thermometer-half"></i> Theshold of Temperature </h4><p><span class="reading">{{roomDetail.theshold_tem}}</span></p>
+                  </div>
+                  <div class="card threshold-hum">
+                    <h4><i class="fas fa-tint"></i> Theshold of Humidity </h4><p><span class="reading">{{roomDetail.theshold_hum}}</span></p>
+                  </div>
                 <div class="card temperature">
                     <h4><i class="fas fa-thermometer-half"></i> TEMPERATURE </h4><p><span class="reading">{{room.temperature}} &deg;C</span></p>
                   </div>
@@ -58,7 +61,7 @@
             </div>
         </div> 
         <div class="row">
-            <div v>
+            <div hidden>
                 {% set date = [] %}
                 {% set temp = [] %}
                 {% set hum = [] %}
@@ -81,13 +84,14 @@
                     var labels ='{{ date }}';  // date
                     var name = 1;
                     var config = {
-                        type: 'bar',
                         data: {
                             labels: labels,
                             datasets: [
                                 {
+                                    type: 'bar',
+
                                     label: 'Temperature',
-                                    data: '{{ hum }}',
+                                    data: '{{ temp }}',
                                     backgroundColor: [
                                     'rgba(255, 99, 132, 0.2)',
                                     ],
@@ -96,17 +100,21 @@
                                     ],
                                     borderWidth: 1
                                 },
+                              
                                 {
+                                    type: 'bar',
+
                                     label: 'Humidity',
-                                    data: '{{ temp }}',
+                                    data: '{{ hum }}',
                                     backgroundColor: [
                                     'rgba(54, 162, 235, 0.2)',
                                     ],
                                     borderColor: [
-                                    'rgb(54, 162, 235)',
+                                    'rgb(54, 162, 235)'
                                     ],
                                     borderWidth: 2
                                 },
+                                
                                 ]
                           
                             },
