@@ -61,16 +61,19 @@
             </div>
         </div> 
         <div class="row">
-            <div hidden>
+            <div >
                 {% set date = [] %}
                 {% set temp = [] %}
                 {% set hum = [] %}
                 {% for item in metric %}  
-                   {{ date.append(item[0]) }}
-                   {{ temp.append(item[1]) }}
-                   {{ hum.append(item[2])  }}
+                   {{ date.append(item[0].strftime("%H:%M:%S %d-%m-%Y") ) }}
+                   {{ temp.append(item[1]|lower) }}
+                   {{ hum.append(item[2]|lower)  }}
                 {% endfor %}
-    
+                {% set date = "|".join(date) %}
+                {% set temp = "|".join(temp) %}
+                {% set hum = "|".join(hum) %}
+
             </div>
             
             <div class="col">
@@ -81,7 +84,8 @@
             </div>
             <script>
                 window.onload = function () {
-                    var labels ='{{ date }}';  // date
+//                    var labels ='{{ date|length }}';  // date
+                    var labels = '{{ date }}'.split("|")
                     var name = 1;
                     var config = {
                         data: {
@@ -91,7 +95,8 @@
                                     type: 'bar',
 
                                     label: 'Temperature',
-                                    data: '{{ temp }}',
+                                    // data: '{{ temp }}',
+                                    data: '{{ temp }}'.split("|"),
                                     backgroundColor: [
                                     'rgba(255, 99, 132, 0.2)',
                                     ],
@@ -103,9 +108,8 @@
                               
                                 {
                                     type: 'bar',
-
                                     label: 'Humidity',
-                                    data: '{{ hum }}',
+                                    data: '{{ hum }}'.split("|"),
                                     backgroundColor: [
                                     'rgba(54, 162, 235, 0.2)',
                                     ],
@@ -114,7 +118,6 @@
                                     ],
                                     borderWidth: 2
                                 },
-                                
                                 ]
                           
                             },
@@ -122,6 +125,20 @@
                                 scales: {
                                   y: {
                                     beginAtZero: true
+                                  }
+                                },
+                                plugins: {
+                                  autocolors: true,
+                                  annotation: {
+                                    annotations: {
+                                      line1: {
+                                        type: 'line',
+                                        yMin: 65,
+                                        yMax: 65,
+                                        borderColor: 'rgb(255, 255, 255)',
+                                        borderWidth: 20,
+                                      }
+                                    }
                                   }
                                 }
                             }

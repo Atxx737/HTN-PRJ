@@ -1,8 +1,6 @@
-// get unique value of array
 
 window.onload = function () {
-var data = [numTaskDone.value,incomplete ];
-var labels = ['Compelete','Incomplete' ];
+var labels = ['Compelete','Incomplete' ];  // date
 
 var config = {
     type: 'line',
@@ -11,7 +9,7 @@ var config = {
         datasets: [
             {
                 data: data,
-                label: "Alberta",
+                label: "Alberta", //name of line
                 borderColor: "#3e95cd",
                 fill: false
             }, 
@@ -55,6 +53,6 @@ var config = {
 
 
 
-const ctx = document.getElementById('myChart').getContext('2d');
+const ctx = document.getElementById('myChart_temp').getContext('2d');
 window.myLine = new Chart(ctx, config);
-        
+};
