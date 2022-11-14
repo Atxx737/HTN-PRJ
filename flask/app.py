@@ -4,16 +4,17 @@ from flask import Flask, request, render_template, session, jsonify, redirect, u
 from werkzeug.security  import check_password_hash, generate_password_hash
 from flask_login import login_required, logout_user, login_user
 
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
+import os
 from flask_migrate import Migrate
-# load_dotenv()  # loads variables from .env file into environment
+load_dotenv()  # loads variables from .env file into environment
 
 from flask_cors import CORS
 from flask_mail import Mail, Message
 from models import db, Rooms, Sensors, Users
 
 app = Flask(__name__)
-app.debug = True
+app.debug = os.environ['FLASK_DEBUG']
 
 mail = Mail(app) # instantiate the mail class
    
@@ -26,14 +27,20 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
-app.config['SECRET_KEY'] = 'thisissecret'
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 # our database uri
-username = "postgres"
-password = "password"
-dbname = "htn_db"
-docker_postgres_name = "db-postgres"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{username}:{password}@{docker_postgres_name}:5432/{dbname}"
+dbtype = os.environ['DB_TYPE']
+username = os.environ['DB_USER']
+password = os.environ['DB_PASSWORD']
+hostname = os.environ['DB_HOST']
+port = os.environ['DB_PORT']
+dbname = os.environ['DB_NAME']
+
+# # docker_postgres_name = "db-postgres"
+# docker_postgres_name = "database-postgres-htn-1.c8cawpg1pytc.ap-southeast-1.rds.amazonaws.com"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = f"{dbtype}://{username}:{password}@{hostname}:{port}/{dbname}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
