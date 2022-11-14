@@ -21,8 +21,8 @@ mail = Mail(app) # instantiate the mail class
 # configuration of mail
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'demoproject.uit@gmail.com'
-app.config['MAIL_PASSWORD'] = "asglpxlejhmwwzfc"
+app.config['MAIL_USERNAME'] = os.environ['F_MAIL_USERNAME']
+app.config['MAIL_PASSWORD'] = os.environ['F_MAIL_PASSWORD']
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
@@ -38,7 +38,6 @@ port = os.environ['DB_PORT']
 dbname = os.environ['DB_NAME']
 
 # # docker_postgres_name = "db-postgres"
-# docker_postgres_name = "database-postgres-htn-1.c8cawpg1pytc.ap-southeast-1.rds.amazonaws.com"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"{dbtype}://{username}:{password}@{hostname}:{port}/{dbname}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
