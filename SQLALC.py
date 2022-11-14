@@ -24,7 +24,7 @@ def main():
     
         data["temperature"] = random.choice(range(0, 90))
         data["humidity"] = random.choice(range(10, 100))
-        data["date"] = datetime.datetime.now(tzone).strftime("%d-%m-%Y %H:%M:%S")
+        data["date"] = datetime.datetime.now(tzone).strftime("%Y-%m-%d %H:%M:%S")
         payload = json.dumps(data)
         
         response = requests.request("POST", url, headers=headers, data=payload)

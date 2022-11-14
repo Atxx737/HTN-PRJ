@@ -42,7 +42,7 @@ migrate = Migrate(app, db)
 
 @app.route('/')
 def hello_world():
-    # if 'username' in session:
+    if 'username' in session:
         all_rooms = Rooms.query.order_by(Rooms.room_id).all()
         metric= Sensors.query.order_by(Sensors.room_id).all()
             
@@ -54,7 +54,7 @@ def hello_world():
 
        
         return render_template('index.html',**templateData)
-    # return redirect(url_for('login'))
+    return redirect(url_for('login'))
 
 
 @app.route("/api/room", methods=['POST'])
@@ -152,7 +152,7 @@ def add_user():
 def login():
     return render_template('login.html')
 
-@app.route('/login', methods=['POST'])
+@app.route('/login_post', methods=['POST'])
 def login_post():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -170,9 +170,9 @@ def login_post():
 @app.route('/logout')
 @login_required
 def logout():
-	if 'username' in session:
-		session.pop('username', None)
-	return redirect('/')
+	# if 'username' in session:
+    session.pop('username', None)
+    return redirect('/')
    
     # return redirect(url_for('hello_world'))
 
