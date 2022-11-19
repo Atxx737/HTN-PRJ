@@ -50,12 +50,17 @@ migrate = Migrate(app, db)
 def hello_world():
     if 'username' in session:
         all_rooms = Rooms.query.order_by(Rooms.room_id).all()
-        metric= Sensors.query.order_by(Sensors.room_id).all()
-            
+        data={"1":"1"}
+        for room in all_rooms:
+            metric = db.session.query(Sensors.room_id,Sensors.date,Sensors.temperature,Sensors.humidity).filter_by(room_id=room.room_id).order_by(Sensors.date.desc()).first()
+            name=room.name
+            data[name]=metric
+
         templateData={
             "all_rooms":all_rooms,
            
-            "metric":metric,
+            # "metric":metric,
+            "data":data,
             }
 
        

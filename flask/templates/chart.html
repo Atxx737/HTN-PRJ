@@ -89,7 +89,6 @@
           <div class="row">
             <div class="col">
                 <canvas id="tempChart" width="400" >
-                  
                 </canvas>
           
             </div>
@@ -160,14 +159,14 @@
                         ctx.save();
                         
                         ctx.strokeStyle = 'red';
-                        ctx.strokeRect(left, y.getPixelForValue(10), width, 0);
+                        ctx.strokeRect(left, y.getPixelForValue('{{roomDetail.theshold_hum}}'), width, 1);
                         ctx.restore();
                       }
             
                     };
   
-                   /////////// plugin threshold hump
-                   const horizonalLinePlugin = {
+                  /////////// plugin threshold hump
+                  const horizonalLinePlugin = {
                     id:'horizonalLinePlugin',
                     beforeDatasetsDraw(chart, args, options) 
                     {
@@ -177,30 +176,13 @@
                       } = chart;
                       ctx.save();
                       
-                      ctx.strokeStyle = 'red';
-                      ctx.strokeRect(left, y.getPixelForValue('{{roomDetail.theshold_hum}}'), width, 0);
+                      ctx.strokeStyle = 'rgb(54, 162, 235)';
+                      ctx.strokeRect(left, y.getPixelForValue('{{roomDetail.theshold_tem}}'), width, 1);
                       ctx.restore();
                     }
           
                   };
-//-------------------------------------------//
-                      const horizonalLinePluginTemp = {
-                        id:'horizonalLinePluginTemp',
-                        beforeDatasetsDraw(chart, args, options) 
-                        {
-                          const { 
-                            ctx1, chartArea: {top, right, bottom, left, width, height},
-                            scales: {x, y}
-                          } = chart;
-                          ctx1.save();
-                          
-                          ctx1.strokeStyle = 'red';
-                          ctx1.strokeRect(left, y.getPixelForValue('{{roomDetail.theshold_tem}}'), width, 0);
-                          ctx1.restore();
-                        }
-
-                      };
-
+                 
                   ////////////// tempChart
                     var config_tempChart = {
                         data: {
@@ -230,8 +212,6 @@
                               }
                             },
                         plugins:[horizonalLinePlugin],
-                        
-                    
                     };
                     
                     const ctx_temp = document.getElementById('tempChart').getContext('2d');
@@ -262,7 +242,7 @@
                             }
                           },
                         },
-                        plugins:[horizonalLinePlugin],
+                        plugins:[horizonalLinePluginHum],
                     };
                     const ctx_hum = document.getElementById('tempHum').getContext('2d');
                     window.myLine = new Chart(ctx_hum, config_humChart);
